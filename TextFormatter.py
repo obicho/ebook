@@ -30,9 +30,6 @@ def drawPage(text):
 
 	#feed textwrap one paragraph at a time. accomodate for carriage return, newline various os
 	for paragraph in re.split('\r\n\r\n|\n\n', text): 
-		print '-------------'
-		print paragraph
-
 		lines = wrapper.wrap(paragraph)
 		for line in lines:
 			simpleLine = cleanse(line)
