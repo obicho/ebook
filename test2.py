@@ -14,10 +14,11 @@ LEFT_MARGIN = 5
 w, h = (264, 176)
 HEIGHT = 11
 wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
+epd = EPD()
 
 def main(argv):
    
-    epd = EPD()
+    
 
     print('panel = {p:s} {w:d} x {h:d}  version={v:s}'.format(p=epd.panel, w=epd.width, h=epd.height, v=epd.version))
 
