@@ -2,13 +2,14 @@
 # Loads a book from text file
 # Reads line by line and print them a pageful at a time
 
-import textwrap
+import textwrap, re
 import Image, ImageFont, ImageDraw
 
 # Setup
 font = ImageFont.load_default()
 LEFT_MARGIN = 5
 w, h = (264, 176)
+HEIGHT = 11
 wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
 
 
@@ -16,16 +17,22 @@ wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
 def drawPage(text):
 	bg = Image.new('RGBA', (w, h), "#FFFFFF")
 	draw = ImageDraw.Draw(bg)
-	lines = wrapper.wrap(text)
 	y_text = 10
-	for line in lines:
-	    width, height = font.getsize(line)
-	    draw.text((LEFT_MARGIN, y_text), line, font = font, fill = 'black')
-	    y_text += height
+	
+	#feed textwrap one paragraph at a time. accomodate for carriage return, newline various os
+	for paragraph in re.split('\r\n\r\n|\n\n', text): 
+		print '-------------'
+		print paragraph
+
+		lines = wrapper.wrap(paragraph)
+		for line in lines:
+		    draw.text((LEFT_MARGIN, y_text), line, font = font, fill = 'black')
+		    y_text += HEIGHT
+		y_text += HEIGHT #generating a line between paragraphs
 	bg.show()
 	bg.save('test.png')
 
-bookFile = open("s.txt")
+bookFile = open("sense.txt")
 
 lineBucket = ''
 
