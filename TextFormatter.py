@@ -5,16 +5,18 @@
 import textwrap
 import Image, ImageFont, ImageDraw
 
-
+# Setup
 font = ImageFont.load_default()
 LEFT_MARGIN = 5
 w, h = (264, 176)
+wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
+
 
 # Draws a screen full (page) of text
 def drawPage(text):
 	bg = Image.new('RGBA', (w, h), "#FFFFFF")
 	draw = ImageDraw.Draw(bg)
-	lines = textwrap.wrap(text, width = 40)
+	lines = wrapper.wrap(text)
 	y_text = 10
 	for line in lines:
 	    width, height = font.getsize(line)
@@ -29,15 +31,13 @@ lineBucket = ''
 
 for bookFileLine in bookFile :
 
-	if len(lineBucket) < 300:
+	if len(lineBucket) < 450:
 		lineBucket+=bookFileLine
 	else:
-		print len(lineBucket)
-		print lineBucket
 		lineBucket+=bookFileLine #got to add this or you will miss a line
 		drawPage(lineBucket)
 		lineBucket = ''
-		raw_input('any key to continue')
+		raw_input('enter to continue')
 
 bookFile.close()
 
