@@ -1,7 +1,7 @@
 ebook
 =====
 
-This is an open source e-reader project designed to work on Raspberry Pi with a Pervasive Display 2.7 inch screen.
+This is an open source, free e-reader project designed to work on Raspberry Pi with a Pervasive Display 2.7 inch screen.
 
 The vision is to build an e-reader OS which comes with a kernel and GUI that work nicely for a e-ink display.
 
@@ -35,10 +35,15 @@ python TextFormatter2.py
 ```
 
 
-<h3>Upcoming features</h3>
+### Upcoming features
 - Parse uPub format
 - Book sharing feature
-- Display from the web - simple UI
+
+
+### License
+
+This project is licensed under Appache License 2.0
+
 
 
 
