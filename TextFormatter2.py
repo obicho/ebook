@@ -1,7 +1,7 @@
 
 
 import sys, codecs
-from EPD import EPD
+# from EPD import EPD
 import textwrap, re
 import Image, ImageFont, ImageDraw
 
@@ -14,15 +14,15 @@ LEFT_MARGIN = 5
 w, h = (264, 176)
 HEIGHT = 11
 wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
-epd = EPD()
+# epd = EPD()
 
 def main(argv):
    
     
 
-    print('panel = {p:s} {w:d} x {h:d}  version={v:s}'.format(p=epd.panel, w=epd.width, h=epd.height, v=epd.version))
+    # print('panel = {p:s} {w:d} x {h:d}  version={v:s}'.format(p=epd.panel, w=epd.width, h=epd.height, v=epd.version))
 
-    epd.clear()
+    # epd.clear()
 
     bookFile = open("sense.txt")
 
@@ -69,10 +69,10 @@ def drawPage(text):
             draw.text((LEFT_MARGIN, y_text), simpleLine, font = font, fill = 'black')
             y_text += HEIGHT
         y_text += HEIGHT #generating a line between paragraphs
-    #bg.show()
-    #bg.save('test.png')
-    epd.display(bg)
-    epd.update()
+    bg.show()
+    bg.save('test.png')
+    # epd.display(bg)
+    # epd.update()
 
 # main
 if "__main__" == __name__:
