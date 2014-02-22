@@ -9,8 +9,10 @@ import Image, ImageFont, ImageDraw
 # Setup
 WHITE = 1
 BLACK = 0
-font = ImageFont.load_default()
+#font = ImageFont.load_default()
+font = ImageFont.truetype("simhei.ttf")
 LEFT_MARGIN = 5
+
 w, h = (264, 176)
 HEIGHT = 11
 wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
@@ -24,8 +26,8 @@ def main(argv):
 
     epd.clear()
 
-    bookFile = open("sense.txt")
-
+ #   bookFile = open("sense.txt")
+    bookFile = codecs.open('ch.txt', encoding='utf-8')
     lineBucket = ''
 
     for bookFileLine in bookFile :
@@ -65,7 +67,8 @@ def drawPage(text):
     for paragraph in re.split('\r\n\r\n|\n\n', text): 
         lines = wrapper.wrap(paragraph)
         for line in lines:
-            simpleLine = cleanse(line)
+            #simpleLine = cleanse(line)
+            simpleLine = line
             draw.text((LEFT_MARGIN, y_text), simpleLine, font = font, fill = 'black')
             y_text += HEIGHT
         y_text += HEIGHT #generating a line between paragraphs
