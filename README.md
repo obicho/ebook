@@ -6,6 +6,7 @@ This is an open source, free e-reader project designed to work on Raspberry Pi w
 The vision is to build an e-reader OS which comes with a kernel and GUI that work nicely for a e-ink display.
 
 ![ebook](test.png "Output")
+![ebook](chinese_output_eink.jpg "Output Chinese")
 
 
 ### Development environment setup
