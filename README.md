@@ -41,8 +41,8 @@ python TextFormatter2.py
 
 
 ### Upcoming features
-- Parse uPub format
-- Book sharing feature
+- Parse ePub format
+- Parse selected web data
 
 
 ### License
