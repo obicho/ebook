@@ -1,9 +1,13 @@
 ebook
 =====
 
+
+### The Grand Vision for Sunny Book
+
+Sunny book is a solar powered e-reader for learning things. It is designed for reading and acquiring knowledge especially in places where Internet connectivity or electricity are sparsely available. Everyone can use it, no matter who you are and where you are.
+
 This is an open source, free e-reader project designed to work on Raspberry Pi with a Pervasive Display 2.7 inch screen.
 
-The vision is to build an e-reader OS which comes with a kernel and GUI that work nicely for a e-ink display.
 
 ![ebook](test.png "Output")
 ![ebook](chinese_output_eink.jpg "Output Chinese")
