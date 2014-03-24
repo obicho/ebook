@@ -1,10 +1,9 @@
 
 
 import sys, codecs
-from EPD import EPD
 import textwrap, re
 import Image, ImageFont, ImageDraw
-
+from TextFormatterInterface import TextFormatterInterface
 
 # Setup
 WHITE = 1
@@ -12,22 +11,27 @@ BLACK = 0
 font = ImageFont.load_default()
 LEFT_MARGIN = 5
 w, h = (264, 176)
-HEIGHT = 11
-wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
-epd = EPD()
+WIDTH = 40
+HEIGHT = 14
+LINE_HEIGHT = 11
 
-def main(argv):
-   
-    
-
-    print('panel = {p:s} {w:d} x {h:d}  version={v:s}'.format(p=epd.panel, w=epd.width, h=epd.height, v=epd.version))
-
-    epd.clear()
-
+def main():
     bookFile = open("sense.txt")
+    pages = TextFormatterInterface(bookFile, WIDTH, HEIGHT)
+    print("This book has %d pages" % (pages.pageCount(),))
 
-    lineBucket = ''
+    while True:
+        try:
+            print '-'*WIDTH
+            page_num = raw_input('Jump to a page: ')
+            page = pages.getPage(int(page_num) - 1)
+            print page
+            drawPage(page)
+        except Exception as e:
+            print 'Failed to query page num: %s' % (page_num,)
+            print e
 
+    '''
     for bookFileLine in bookFile :
 
         if len(lineBucket) < 450:
@@ -37,23 +41,7 @@ def main(argv):
             drawPage(lineBucket)
             lineBucket = ''
             raw_input('enter to continue')
-
-    bookFile.close()
-
-    #Output remaining text if any
-    if len(lineBucket) > 0:
-        drawPage(lineBucket)
-
-
-
-
-# Remove unwanted, non-printable characters including BOM
-def cleanse(line):
-    newline = line
-    if (line.startswith(codecs.BOM_UTF8)):
-        newline = line[3:]
-    
-    return newline;
+            '''
 
 # Draws a screen full (page) of text
 def drawPage(text):
@@ -62,20 +50,14 @@ def drawPage(text):
     y_text = 10
 
     #feed textwrap one paragraph at a time. accomodate for carriage return, newline various os
-    for paragraph in re.split('\r\n\r\n|\n\n', text): 
-        lines = wrapper.wrap(paragraph)
-        for line in lines:
-            simpleLine = cleanse(line)
-            draw.text((LEFT_MARGIN, y_text), simpleLine, font = font, fill = 'black')
-            y_text += HEIGHT
-        y_text += HEIGHT #generating a line between paragraphs
-    #bg.show()
-    #bg.save('test.png')
-    epd.display(bg)
-    epd.update()
+    for line in text.split('\n'):
+        draw.text((LEFT_MARGIN, y_text), line, font = font, fill = 'black')
+        y_text += LINE_HEIGHT
+    bg.show()
+    bg.save('test.png')
+    # epd.display(bg)
+    # epd.update()
 
 # main
-if "__main__" == __name__:
-    if len(sys.argv) < 1:
-        sys.exit('usage: {p:s}'.format(p=sys.argv[0]))
-    main(sys.argv[1:])
+if __name__ == "__main__":
+    main()
