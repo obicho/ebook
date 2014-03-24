@@ -3,7 +3,6 @@ from Queue import Queue
 class TxtReader:
     def __init__(self, fh):
         self.__fh = fh
-        self.__fh.seek(0)
         self.__words = Queue()
         self.__pointer = 0
         self.__current_word = None
@@ -19,6 +18,9 @@ class TxtReader:
         if line == '':
             return False
         
+        if line == '\r\n':
+            self.__words.put(('\n', self.__pointer, self.__pointer+1))
+            self.__pointer += 2
         if line == '\n':
             self.__words.put(('\n', self.__pointer, self.__pointer+1))
             self.__pointer += 1
@@ -29,7 +31,7 @@ class TxtReader:
             words = line.split(' ')
             for word in words:
                 l = len(word)
-                self.__words.put((word, self.__pointer, self.__pointer+l))
+                self.__words.put((word.replace('\r',''), self.__pointer, self.__pointer+l))
                 self.__pointer += l + 1
 
         return True

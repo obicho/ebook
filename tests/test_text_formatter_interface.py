@@ -1,14 +1,18 @@
 import unittest
-import TextFormatterInterface
+from TextFormatterInterface import TextFormatterInterface
 
 class TestTextFormatterInterface(unittest.TestCase):
 
     def setUp(self):
         bookFile = open("sense.txt")
-        self.t = TextFormatterInterface.new(bookFile, 264, 176)
+        self.t = TextFormatterInterface(bookFile, 45, 20)
 
     def testLoadBook(self):
-        len(self.t.page_pointer) > 0
+        self.assertGreater(len(self.t.page_pointer), 10)
+
+    def testGetPage(self):
+        # print self.t.getPage(0)
+        self.assertGreater(len(self.t.getPage(0)), 100)
 
 if __name__ == '__main__':
     unittest.main()

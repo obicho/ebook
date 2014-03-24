@@ -1,3 +1,5 @@
+from TxtReader import TxtReader
+
 class TextFormatterInterface:
     def __init__ (self, book_handle, width, height):
         self.width = width
@@ -5,21 +7,63 @@ class TextFormatterInterface:
         self.book_handle = book_handle
         self.page_pointer = []
         self.loadBook()
-        self.
-        self.wrapper = textwrap.TextWrapper(replace_whitespace = False, width = 40)
+        self.__current_page_id = 0
 
-    def loadBook():
+    def loadBook(self):
         self.book_handle.seek(0)
+        self.__reader = TxtReader(self.book_handle)
         offset = 0
-        page_line = 0
-        self.page_pointer.append(0)
+        line_width = 0
+        line_count = 0
 
-        #TODO record the starting position of every page based on screen size
-        for line in book_handle:
-            offset += len(line)
-            if page_line >= 20:
-                self.page_pointer.append(offset)
-                page_line = 0
+        while True:
+            word = self.__reader.nextWord()
+            if word == None:
+                break
+
+            if word == '\n' or line_width + len(word) + 1 > self.width:
+                line_width = 0
+                line_count += 1
+                if line_count == self.height:
+                    line_count = 0
+                    self.page_pointer.append(offset)
+                    if word == '\n':
+                        offset = self.__reader.endPointer()
+                    else:
+                        offset = self.__reader.startPointer()
+                        line_width = len(word)
+            else:
+                if line_width == 0:
+                    line_width = len(word)
+                else:
+                    line_width += len(word)+1
+
+    def getPage(self, page_id):
+        if page_id < 0 or page_id >= self.pageCount():
+            raise ValueError("Invalid page_id: " + page_id)
+
+        pointer = self.page_pointer[page_id]
+        self.book_handle.seek(pointer)
+        lines = []
+        line = self.__reader.nextWord()
+
+        while True:
+            word = self.__reader.nextWord()
+            if word == None:
+                break
+
+            if word == '\n' or len(line) + len(word) + 1 > self.width:
+                lines.append(line)
+                if len(lines) == self.height:
+                    break
+                if word == '\n':
+                    line = ''
+                else:
+                    line = word
+            else:
+                line += ' ' + word
+
+        return '\n'.join(lines)
 
     def cleanse(self, line):
         newline = line
@@ -28,23 +72,12 @@ class TextFormatterInterface:
     
         return newline;
 
-    def drawScreen(self, text):
-        bg = Image.new('RGBA', (w, h), "#FFFFFF")
-        draw = ImageDraw.Draw(bg)
-        y_text = 10
-
-        #feed textwrap one paragraph at a time. accomodate for carriage return, newline various os
-        for paragraph in re.split('\r\n\r\n|\n\n', text): 
-            lines = self.wrapper.wrap(paragraph)
-            for line in lines:
-                simpleLine = cleanse(line)
-                draw.text((LEFT_MARGIN, y_text), simpleLine, font = font, fill = 'black')
-                y_text += HEIGHT
-            y_text += HEIGHT #generating a line between paragraphs
-
-    def drawPage(self):
-        self.nextPage()
-        # code
+    def getCurrentPage(self):
+        return getPage(self.__current_page_id)
 
     def nextPage(self):
-        # self.file_h
+        self.__current_page_id += 1
+        return getCurrentPage()
+
+    def pageCount(self):
+        return len(self.page_pointer)

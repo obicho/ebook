@@ -23,7 +23,7 @@ class TestTxtReader(unittest.TestCase):
 
     def assertWord(self, word, s, e, fh):
         fh.seek(s)
-        self.assertEquals(word, fh.read(e - s))
+        self.assertEquals(word, fh.read(e - s).replace('\r', ''))
 
     def testNextWordEntireBook(self):
         fh = open('sense.txt')
@@ -36,6 +36,6 @@ class TestTxtReader(unittest.TestCase):
             else:
                 self.assertWord(word, r.startPointer(), r.endPointer(), fh2)
 
-if __file__ == '__main__':
+if __name__ == '__main__':
     unittest.main()
 
