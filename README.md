@@ -9,7 +9,6 @@ Sunny book is a solar powered e-reader for learning things. It is designed for r
 This is an open source, free e-reader project designed to work on Raspberry Pi with a Pervasive Display 2.7 inch screen.
 
 
-![ebook](test.png "Output")
 ![ebook](chinese_output_eink.jpg "Output Chinese")
 
 
@@ -39,6 +38,10 @@ python TextFormatter.py
 python TextFormatter2.py
 ```
 
+Run all tests
+```
+./test-runner.sh
+```
 
 ### Upcoming features
 - Parse ePub format
