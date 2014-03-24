@@ -31,18 +31,6 @@ def main():
             print 'Failed to query page num: %s' % (page_num,)
             print e
 
-    '''
-    for bookFileLine in bookFile :
-
-        if len(lineBucket) < 450:
-            lineBucket+=bookFileLine
-        else:
-            lineBucket+=bookFileLine #got to add this or you will miss a line
-            drawPage(lineBucket)
-            lineBucket = ''
-            raw_input('enter to continue')
-            '''
-
 # Draws a screen full (page) of text
 def drawPage(text):
     bg = Image.new('RGBA', (w, h), "#FFFFFF")

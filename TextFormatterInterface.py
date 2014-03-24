@@ -1,49 +1,41 @@
 from TxtReader import TxtReader
+import codecs
 
 class TextFormatterInterface:
     def __init__ (self, book_handle, width, height):
         self.width = width
         self.height = height
         self.book_handle = book_handle
-        self.page_pointer = []
         self.loadBook()
-        self.__current_page_id = 0
 
     def loadBook(self):
-        self.book_handle.seek(0)
+        self.__current_page_id = 0
+        self.page_pointer = []
         self.__reader = TxtReader(self.book_handle)
+        self.__reader.seek(0)
         offset = 0
-        line_width = 0
-        line_count = 0
-
         while True:
-            word = self.__reader.nextWord()
-            if word == None:
+            page = self._getPageByPointer(offset)
+            if page == None:
                 break
 
-            if word == '\n' or line_width + len(word) + 1 > self.width:
-                line_width = 0
-                line_count += 1
-                if line_count == self.height:
-                    line_count = 0
-                    self.page_pointer.append(offset)
-                    if word == '\n':
-                        offset = self.__reader.endPointer()
-                    else:
-                        offset = self.__reader.startPointer()
-                        line_width = len(word)
+            self.page_pointer.append(offset)
+            new_offset = self.__reader.startPointer()
+
+            if new_offset == offset:
+                break
             else:
-                if line_width == 0:
-                    line_width = len(word)
-                else:
-                    line_width += len(word)+1
+                offset = new_offset
 
     def getPage(self, page_id):
         if page_id < 0 or page_id >= self.pageCount():
             raise ValueError("Invalid page_id: " + page_id)
 
         pointer = self.page_pointer[page_id]
-        self.book_handle.seek(pointer)
+        return self._getPageByPointer(pointer)
+
+    def _getPageByPointer(self, pointer):
+        self.__reader.seek(pointer)
         lines = []
         line = self.__reader.nextWord()
 
@@ -53,7 +45,7 @@ class TextFormatterInterface:
                 break
 
             if word == '\n' or len(line) + len(word) + 1 > self.width:
-                lines.append(line)
+                lines.append(self.cleanse(line))
                 if len(lines) == self.height:
                     break
                 if word == '\n':
