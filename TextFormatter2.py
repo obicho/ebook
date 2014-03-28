@@ -19,12 +19,18 @@ def main():
     bookFile = open("sense.txt")
     pages = TextFormatterInterface(bookFile, WIDTH, HEIGHT)
     print("This book has %d pages" % (pages.pageCount(),))
+    page_id = -1
 
     while True:
         try:
             print '-'*WIDTH
-            page_num = raw_input('Jump to a page: ')
-            page = pages.getPage(int(page_num) - 1)
+            page_num = raw_input('<Enter> next page or <Page number> jump to a page: ')
+            if page_num == '':
+                page_id += 1
+            else:
+                page_id = int(page_num)
+
+            page = pages.getPage(page_id)
             print page
             drawPage(page)
         except Exception as e:
