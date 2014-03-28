@@ -43,6 +43,10 @@ class TxtIndex:
     def exact_search(self, phrase):
         phrase = self.norm_phrase(phrase)
         words = phrase.split(' ')
+
+        if len(words) == 1:
+            return self.get_pointers(words[0])
+
         try_word = None
         try_word_idx = None
         try_word_pointers = []
