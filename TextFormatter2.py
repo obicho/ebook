@@ -24,9 +24,13 @@ def main():
     while True:
         try:
             print '-'*WIDTH
-            page_num = raw_input('<Enter> next page or <Page number> jump to a page: ')
+            page_num = raw_input("<Enter> next page\n<Page number> jump to a page\n<\string> exact search\n: ")
             if page_num == '':
                 page_id += 1
+            elif page_num[0] == '\\':
+                pointers = pages.search(page_num[1:])
+                print "found '%s' in the following locations: %s" % (page_num[1:], pointers)
+                continue
             else:
                 page_id = int(page_num)
 

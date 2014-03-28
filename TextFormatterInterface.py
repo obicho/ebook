@@ -1,4 +1,5 @@
 from TxtReader import TxtReader
+from TxtIndex import TxtIndex
 import codecs
 
 class TextFormatterInterface:
@@ -7,6 +8,7 @@ class TextFormatterInterface:
         self.height = height
         self.book_handle = book_handle
         self.loadBook()
+        self.loadIndex()
 
     def loadBook(self):
         self.__current_page_id = 0
@@ -26,6 +28,9 @@ class TextFormatterInterface:
                 break
             else:
                 offset = new_offset
+
+    def loadIndex(self):
+        self.__index = TxtIndex(self.book_handle)
 
     def getPage(self, page_id):
         if page_id < 0 or page_id >= self.pageCount():
@@ -73,3 +78,6 @@ class TextFormatterInterface:
 
     def pageCount(self):
         return len(self.page_pointer)
+
+    def search(self, phrase):
+        return self.__index.exact_search(phrase)
