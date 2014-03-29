@@ -45,5 +45,12 @@ class TestTextFormatterInterface(unittest.TestCase):
 
         self.assertTrue(original.startswith(pages))
 
+    def testSearch(self):
+        page_nums = self.t.search('elinor')
+        self.assertNotEquals(page_nums, None)
+        for page_num in page_nums:
+            page = self.t.getPage(page_num-1)
+            self.assertTrue('elinor' in page.lower(), 'elinor is not found in %s' % (page,))
+
 if __name__ == '__main__':
     unittest.main()

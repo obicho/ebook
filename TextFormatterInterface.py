@@ -1,6 +1,7 @@
 from TxtReader import TxtReader
 from TxtIndex import TxtIndex
 import codecs
+import bisect
 
 class TextFormatterInterface:
     def __init__ (self, book_handle, width, height):
@@ -80,4 +81,17 @@ class TextFormatterInterface:
         return len(self.page_pointer)
 
     def search(self, phrase):
-        return self.__index.exact_search(phrase)
+        pointers = self.__index.exact_search(phrase)
+        if pointers == None:
+            return None
+
+        page_nums = []
+        for pointer in pointers:
+            page_num = self.getPageNumFromPointer(pointer)
+            if (len(page_nums) == 0 or page_nums[-1] != page_num):
+                page_nums.append(page_num)
+
+        return page_nums
+
+    def getPageNumFromPointer(self, pointer):
+        return bisect.bisect_right(self.page_pointer, pointer)
