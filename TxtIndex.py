@@ -92,7 +92,7 @@ class TxtIndex:
         words = phrase.split(' ')
 
         if len(words) == 1:
-            return self.get_pointers(words[0])
+            return {words[0]: self.get_pointers(words[0])}
 
         word_pointers = {}
 

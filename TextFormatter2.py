@@ -24,12 +24,22 @@ def main():
     while True:
         try:
             print '-'*WIDTH
-            page_num = raw_input("<Enter> next page\n<Page number> jump to a page\n</string> exact search\n: ")
+            page_num = raw_input("<Enter> next page\n" + 
+                                 "<Page number> jump to a page\n" + 
+                                 "</string> exact search\n" + 
+                                 "<f/string> fuzzy search:\n")
             if page_num == '':
                 page_id += 1
             elif page_num[0] == '/':
                 page_nums = pages.search(page_num[1:])
                 print "found '%s' in the following pages: %s" % (page_num[1:], page_nums)
+                if page_nums == None:
+                    continue
+
+                page_id = int(page_nums[0])-1
+            elif len(page_num) > 2 and page_num[0:2] == 'f/':
+                page_nums = pages.fuzzySearch(page_num[2:])
+                print "partial matches in the following pages: %s" % (page_nums, )
                 if page_nums == None:
                     continue
 
@@ -40,7 +50,7 @@ def main():
             page = pages.getPage(page_id)
             print page
             drawPage(page)
-        except Exception as e:
+        except IOError as e:
             print 'Failed to query page num: %s' % (page_num,)
             print e
 

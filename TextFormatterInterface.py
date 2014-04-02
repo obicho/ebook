@@ -98,9 +98,15 @@ class TextFormatterInterface:
 
     def fuzzySearch(self, phrase):
         word_pointers = self.__index.get_word_pointers(phrase)
+        if word_pointers == None:
+            return None
+
         page_word_count = {}
         for word in word_pointers:
             pointers = word_pointers[word]
+            if pointers == None:
+                continue
+
             for pointer in pointers:
                 page_num = self.getPageNumFromPointer(pointer)
                 if page_num not in page_word_count:
@@ -112,11 +118,17 @@ class TextFormatterInterface:
                 page_word_count[page_num][word] += 1
 
         pages_ranked = sorted(page_word_count.items(), key=self.__pageCompare)
-        return [x[0] for x in pages_ranked]
+        pages_ranked = [x[0] for x in pages_ranked]
+
+        if pages_ranked == []:
+            return None
+
+        return pages_ranked
 
     def __pageCompare(self, page_word_count):
         page, word_count = page_word_count
         # sort page first by number occurences of unique word, 
         # then by total count in descending order
-        return (-len(word_count), -sum(word_count.values()), -page)
+        # then by page number in ascending order
+        return (-len(word_count), -sum(word_count.values()), page)
 

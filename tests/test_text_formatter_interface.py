@@ -62,5 +62,17 @@ class TestTextFormatterInterface(unittest.TestCase):
             # print 'page %d -----------------------------------' % (page_num, )
             # print page
 
+    def testFuzzySearchSingleTokenWord(self):
+        page_nums = self.t.fuzzySearch('elinor')
+        self.assertNotEquals(page_nums, None)
+        for page_num in page_nums:
+            page_id = page_num - 1
+            page = self.t.getPage(page_id)
+            self.assertTrue('elinor' in page.lower())
+
+    def testFuzzySearchNoResult(self):
+        page_nums = self.t.fuzzySearch('DoesNotExist')
+        self.assertEquals(page_nums, None)
+
 if __name__ == '__main__':
     unittest.main()
