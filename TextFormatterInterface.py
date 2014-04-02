@@ -95,3 +95,28 @@ class TextFormatterInterface:
 
     def getPageNumFromPointer(self, pointer):
         return bisect.bisect_right(self.page_pointer, pointer)
+
+    def fuzzySearch(self, phrase):
+        word_pointers = self.__index.get_word_pointers(phrase)
+        page_word_count = {}
+        for word in word_pointers:
+            pointers = word_pointers[word]
+            for pointer in pointers:
+                page_num = self.getPageNumFromPointer(pointer)
+                if page_num not in page_word_count:
+                    page_word_count[page_num] = {}
+
+                if word not in page_word_count[page_num]:
+                    page_word_count[page_num][word] = 0
+
+                page_word_count[page_num][word] += 1
+
+        pages_ranked = sorted(page_word_count.items(), key=self.__pageCompare)
+        return [x[0] for x in pages_ranked]
+
+    def __pageCompare(page_word_count):
+        word_count = page_word_count[1]
+        # sort page first by number occurences of unique word, 
+        # then by total count in descending order
+        return (-len(word_count), -sum(word_count.values()))
+

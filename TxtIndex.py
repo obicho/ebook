@@ -86,3 +86,21 @@ class TxtIndex:
             return found
         else:
             return None
+
+    def get_word_pointers(self, phrase):
+        phrase = self.norm_phrase(phrase)
+        words = phrase.split(' ')
+
+        if len(words) == 1:
+            return self.get_pointers(words[0])
+
+        word_pointers = {}
+
+        for word in words:
+            if word in word_pointers or self.stop_words.is_stop_word(word):
+                continue
+
+            word_pointers[word] = self.get_pointers(word)
+
+        return word_pointers
+

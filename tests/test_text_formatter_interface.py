@@ -52,5 +52,15 @@ class TestTextFormatterInterface(unittest.TestCase):
             page = self.t.getPage(page_num-1)
             self.assertTrue('elinor' in page.lower(), 'elinor is not found in %s' % (page,))
 
+    def testFuzzySearch(self):
+        page_nums = self.t.fuzzySearch('sense of duty')
+        self.assertNotEquals(page_nums, None)
+        for page_num in page_nums[0:5]:
+            page_id = page_num - 1
+            page = self.t.getPage(page_id)
+            self.assertTrue('sense' in page or 'duty' in page)
+            print 'page %d -----------------------------------' % (page_num, )
+            print page
+
 if __name__ == '__main__':
     unittest.main()
