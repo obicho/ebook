@@ -114,9 +114,9 @@ class TextFormatterInterface:
         pages_ranked = sorted(page_word_count.items(), key=self.__pageCompare)
         return [x[0] for x in pages_ranked]
 
-    def __pageCompare(page_word_count):
-        word_count = page_word_count[1]
+    def __pageCompare(self, page_word_count):
+        page, word_count = page_word_count
         # sort page first by number occurences of unique word, 
         # then by total count in descending order
-        return (-len(word_count), -sum(word_count.values()))
+        return (-len(word_count), -sum(word_count.values()), -page)
 
